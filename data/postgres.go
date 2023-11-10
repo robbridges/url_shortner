@@ -39,7 +39,7 @@ func Open(config PostgressConfig) (*sql.DB, error) {
 	}
 	err = db.Ping()
 	if err != nil {
-		fmt.Println("Failed to ping the database. Please check connection settings")
+		return nil, err
 	}
 
 	return db, nil
