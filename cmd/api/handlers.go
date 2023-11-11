@@ -51,7 +51,6 @@ func (app App) InsertUrl(c echo.Context) error {
 func (app App) GetUrl(c echo.Context) error {
 	shortUrl := c.Param("url")
 
-	// Reload the URL from the database
 	url, err := app.UrlModel.GetUrl(shortUrl)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Url not found")
