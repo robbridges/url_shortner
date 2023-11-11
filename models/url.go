@@ -25,3 +25,13 @@ func (us *UrlService) InsertUrl(url *Url) error {
 	}
 	return nil
 }
+
+func (us *UrlService) GetUrl(short_url string) (string, error) {
+	var url string
+	stmt := `SELECT url FROM url WHERE short_url = $1`
+	err := us.DB.QueryRow(stmt, short_url).Scan(&url)
+	if err != nil {
+		return "", err
+	}
+	return url, nil
+}
