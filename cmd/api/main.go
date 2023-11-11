@@ -1,9 +1,8 @@
 package main
 
 import (
-	"database/sql"
-	"echo_url_shortner/cmd/api"
 	"echo_url_shortner/data"
+	"echo_url_shortner/models"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
@@ -11,10 +10,10 @@ import (
 )
 
 type App struct {
-	DB *sql.DB
+	UrlModel models.UrlService
 }
 
-func init() {
+func main() {
 	viper.SetConfigFile("local.env")
 	viper.AddConfigPath("/")
 	viper.AutomaticEnv()
@@ -22,9 +21,7 @@ func init() {
 	if err := viper.ReadInConfig(); err != nil {
 		panic(fmt.Errorf("init: %w", err))
 	}
-}
 
-func main() {
 	e := echo.New()
 
 	cfg := data.DefaultPostgresConfig()
@@ -34,7 +31,10 @@ func main() {
 	}
 	defer db.Close()
 
-	api.SetupRoutes(e)
+	app := App{}
+	app.UrlModel = models.UrlService{DB: db}
+
+	app.SetupRoutes(e)
 
 	err = e.Start(":8080")
 	if err != nil {

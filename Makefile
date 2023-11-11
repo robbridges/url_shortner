@@ -1,6 +1,9 @@
 include local.env
 export
 
+run:
+	@echo "Running API..."
+	go run ./cmd/api
 migration:
 	@echo "Creating migration files for ${name}..."
 	migrate create -ext=.sql -dir=./migrations ${name}

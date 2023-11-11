@@ -1,12 +1,13 @@
-package api
+package main
 
 import (
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
-func SetupRoutes(e *echo.Echo) {
+func (app App) SetupRoutes(e *echo.Echo) {
 	e.GET("/", helloWorldHandler)
+	e.POST("/urls", app.InsertUrl)
 	e.HTTPErrorHandler = func(err error, c echo.Context) {
 		if he, ok := err.(*echo.HTTPError); ok {
 			if he.Code == http.StatusNotFound {
