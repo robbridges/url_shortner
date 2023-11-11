@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/jackc/pgconn"
 	"time"
 )
@@ -64,5 +65,5 @@ func (m *UrlServiceMock) GetUrl(short_url string) (string, error) {
 			return url.Url, nil
 		}
 	}
-	return "", nil
+	return "", fmt.Errorf("Short URL not found")
 }
