@@ -2,8 +2,14 @@ package models
 
 import (
 	"database/sql"
+	"github.com/jackc/pgconn"
 	"time"
 )
+
+type IUrlService interface {
+	InsertUrl(url *Url) error
+	GetUrl(short_url string) (string, error)
+}
 
 type Url struct {
 	ID        int
@@ -15,6 +21,10 @@ type Url struct {
 
 type UrlService struct {
 	DB *sql.DB
+}
+
+type UrlServiceMock struct {
+	DB []*Url
 }
 
 func (us *UrlService) InsertUrl(url *Url) error {
@@ -34,4 +44,25 @@ func (us *UrlService) GetUrl(short_url string) (string, error) {
 		return "", err
 	}
 	return url, nil
+}
+
+func (m *UrlServiceMock) InsertUrl(url *Url) error {
+	for _, u := range m.DB {
+		if u.Url == url.Url {
+			return &pgconn.PgError{ConstraintName: "url_url_key"}
+		}
+	}
+
+	m.DB = append(m.DB, url)
+
+	return nil
+}
+
+func (m *UrlServiceMock) GetUrl(short_url string) (string, error) {
+	for _, url := range m.DB {
+		if url.ShortUrl == short_url {
+			return url.Url, nil
+		}
+	}
+	return "", nil
 }

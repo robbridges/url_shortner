@@ -10,7 +10,7 @@ import (
 )
 
 type App struct {
-	UrlModel models.UrlService
+	UrlModel models.IUrlService
 }
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 	defer db.Close()
 
 	app := App{}
-	app.UrlModel = models.UrlService{DB: db}
+	app.UrlModel = &models.UrlService{DB: db}
 
 	app.SetupRoutes(e)
 

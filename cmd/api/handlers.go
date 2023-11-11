@@ -23,7 +23,7 @@ func (app App) InsertUrl(c echo.Context) error {
 	}
 
 	err := c.Bind(&payload)
-	if err != nil {
+	if err != nil || payload.Url == "" {
 		return c.String(http.StatusBadRequest, "Bad request")
 	}
 

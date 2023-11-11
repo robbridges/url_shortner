@@ -11,3 +11,5 @@ migrate_up:
 	    migrate -path=./migrations -database=postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSLMODE) up
 migrate_down:
 	    migrate -path=./migrations -database=postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSLMODE) down
+test:
+	go test -coverprofile=coverage.out ./... && go tool cover -html=coverage.out
