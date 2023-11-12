@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  test-db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mockurltest
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./mockdata:/docker-entrypoint-initdb.d

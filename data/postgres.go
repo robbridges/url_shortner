@@ -27,6 +27,17 @@ func DefaultPostgresConfig() PostgressConfig {
 	}
 }
 
+func DefaultTestPostgresConfig() PostgressConfig {
+	return PostgressConfig{
+		Host:     "localhost",
+		Port:     "5434",
+		User:     "postgres",
+		Password: "postgres",
+		Database: "mockurltest",
+		SSLMODE:  "disable",
+	}
+}
+
 func Open(config PostgressConfig) (*sql.DB, error) {
 
 	db, err := sql.Open(
