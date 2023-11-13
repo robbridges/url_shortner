@@ -62,10 +62,20 @@ func (m *UrlServiceMock) InsertUrl(url *Url) error {
 
 func (m *UrlService) DeleteUrl(short_url string) error {
 	statement := `DELETE FROM url WHERE short_url = $1`
-	_, err := m.DB.Exec(statement, short_url)
+	res, err := m.DB.Exec(statement, short_url)
 	if err != nil {
 		return err
 	}
+
+	count, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if count == 0 {
+		return fmt.Errorf("URL not found")
+	}
+
 	return nil
 }
 
