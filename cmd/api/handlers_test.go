@@ -152,15 +152,6 @@ func TestApp_GetUrl(t *testing.T) {
 		}
 	})
 	t.Run("Get URL Not Found", func(t *testing.T) {
-		e := echo.New()
-
-		mockUrlService := &models.UrlServiceMock{
-			DB: []*models.Url{},
-		}
-
-		app := App{
-			UrlModel: mockUrlService,
-		}
 
 		req := httptest.NewRequest(http.MethodGet, "/abc123", nil)
 		rec := httptest.NewRecorder()
