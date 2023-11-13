@@ -5,7 +5,6 @@ import (
 	"fmt"
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/spf13/viper"
-	"os"
 )
 
 type PostgressConfig struct {
@@ -51,20 +50,6 @@ func Open(config PostgressConfig) (*sql.DB, error) {
 	err = db.Ping()
 	if err != nil {
 		return nil, err
-	}
-
-	return db, nil
-}
-
-func OpenDSN(dsn string) (*sql.DB, error) {
-	connectionString := os.Getenv(dsn)
-	db, err := sql.Open("pgx", connectionString)
-	if err != nil {
-		return nil, fmt.Errorf("error Opening DB: %w", err)
-	}
-	err = db.Ping()
-	if err != nil {
-		fmt.Println("Failed to ping the database:", err)
 	}
 
 	return db, nil

@@ -10,6 +10,7 @@ import (
 type IUrlService interface {
 	InsertUrl(url *Url) error
 	GetUrl(short_url string) (string, error)
+	DeleteUrl(short_url string) error
 }
 
 type Url struct {
@@ -59,6 +60,15 @@ func (m *UrlServiceMock) InsertUrl(url *Url) error {
 	return nil
 }
 
+func (m *UrlService) DeleteUrl(short_url string) error {
+	statement := `DELETE FROM url WHERE short_url = $1`
+	_, err := m.DB.Exec(statement, short_url)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (m *UrlServiceMock) GetUrl(short_url string) (string, error) {
 	for _, url := range m.DB {
 		if url.ShortUrl == short_url {
@@ -66,4 +76,14 @@ func (m *UrlServiceMock) GetUrl(short_url string) (string, error) {
 		}
 	}
 	return "", fmt.Errorf("Short URL not found")
+}
+
+func (m *UrlServiceMock) DeleteUrl(short_url string) error {
+	for i, url := range m.DB {
+		if url.ShortUrl == short_url {
+			m.DB = append(m.DB[:i], m.DB[i+1:]...)
+			return nil
+		}
+	}
+	return fmt.Errorf("Short URL not found")
 }
