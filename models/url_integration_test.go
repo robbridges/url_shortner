@@ -16,7 +16,7 @@ func TestUrlService_InsertUrl(t *testing.T) {
 		err = urlService.InsertUrl(&Url{
 			Url:      "https://example.com",
 			ShortUrl: "https://example.com/short",
-			leetcode: false,
+			Leetcode: false,
 		})
 		if err != nil {
 			t.Errorf("Expected no error, but got %s", err)
@@ -35,7 +35,7 @@ func TestUrlService_InsertUrl(t *testing.T) {
 		err = urlService.InsertUrl(&Url{
 			Url:      "https://abc.com",
 			ShortUrl: "https://aaa",
-			leetcode: false,
+			Leetcode: false,
 		})
 		if err != nil {
 			t.Errorf("Expected no error, but got %s", err)
@@ -43,7 +43,7 @@ func TestUrlService_InsertUrl(t *testing.T) {
 		err = urlService.InsertUrl(&Url{
 			Url:      "https://abc.com",
 			ShortUrl: "https://aaa",
-			leetcode: false,
+			Leetcode: false,
 		})
 		if err == nil {
 			t.Errorf("Expected error, but got nil")
@@ -88,7 +88,7 @@ func TestUrlServiceIntegration_DeleteUrl(t *testing.T) {
 		err = urlService.InsertUrl(&Url{
 			Url:      "https://example.com",
 			ShortUrl: "https://example.com/short",
-			leetcode: false,
+			Leetcode: false,
 		})
 		if err != nil {
 			t.Errorf("Expected no error, but got %s", err)

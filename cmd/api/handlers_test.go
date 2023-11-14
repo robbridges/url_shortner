@@ -24,8 +24,9 @@ func TestInsertUrl(t *testing.T) {
 	}
 	t.Run("Happy path", func(t *testing.T) {
 		payload := new(bytes.Buffer)
-		json.NewEncoder(payload).Encode(map[string]string{
-			"url": "https://example.com",
+		json.NewEncoder(payload).Encode(map[string]interface{}{
+			"url":      "https://example.com",
+			"leetcode": false,
 		})
 		req := httptest.NewRequest(http.MethodPost, "/", payload)
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
@@ -40,6 +41,7 @@ func TestInsertUrl(t *testing.T) {
 			var url models.Url
 			if assert.NoError(t, json.NewDecoder(rec.Body).Decode(&url)) {
 				assert.Equal(t, "https://example.com", url.Url)
+				assert.Equal(t, false, url.Leetcode)
 			}
 
 			assert.Equal(t, 1, len(mockUrlService.DB))

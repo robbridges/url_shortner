@@ -19,7 +19,7 @@ type Url struct {
 	ShortUrl  string
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	leetcode  bool
+	Leetcode  bool
 }
 
 type UrlService struct {
@@ -32,7 +32,7 @@ type UrlServiceMock struct {
 
 func (us *UrlService) InsertUrl(url *Url) error {
 	stmt := `INSERT INTO url (url, short_url, created_at, updated_at, leetcode) VALUES ($1, $2, $3, $4, $5) RETURNING id, url, short_url, leetcode`
-	err := us.DB.QueryRow(stmt, url.Url, url.ShortUrl, time.Now(), time.Now(), url.leetcode).Scan(&url.ID, &url.Url, &url.ShortUrl, &url.leetcode)
+	err := us.DB.QueryRow(stmt, url.Url, url.ShortUrl, time.Now(), time.Now(), url.Leetcode).Scan(&url.ID, &url.Url, &url.ShortUrl, &url.Leetcode)
 	if err != nil {
 		return err
 	}

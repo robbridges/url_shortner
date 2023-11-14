@@ -19,7 +19,8 @@ func notFoundHandler(c echo.Context) error {
 
 func (app App) InsertUrl(c echo.Context) error {
 	var payload struct {
-		Url string `json:"url"`
+		Url      string `json:"url"`
+		Leetcode bool   `json:"leetcode"`
 	}
 
 	err := c.Bind(&payload)
@@ -32,6 +33,7 @@ func (app App) InsertUrl(c echo.Context) error {
 		ShortUrl:  StringWithCharset(6, charset),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
+		Leetcode:  payload.Leetcode,
 	}
 
 	err = app.UrlModel.InsertUrl(url)
