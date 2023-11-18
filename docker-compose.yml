@@ -1,6 +1,12 @@
 version: '3'
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
   test-db:
     image: postgres
     restart: always
