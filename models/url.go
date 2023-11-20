@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/jackc/pgconn"
+	"math/rand"
 	"time"
 )
 
@@ -11,6 +12,7 @@ type IUrlService interface {
 	InsertUrl(url *Url) error
 	GetUrl(short_url string) (string, error)
 	DeleteUrl(short_url string) error
+	GetRandomLeetCode() (string, error)
 }
 
 type Url struct {
@@ -79,6 +81,15 @@ func (m *UrlService) DeleteUrl(short_url string) error {
 
 	return nil
 }
+func (us *UrlService) GetRandomLeetCode() (string, error) {
+	var url string
+	stmt := `SELECT url FROM url WHERE leetcode = true ORDER BY random() LIMIT 1`
+	err := us.DB.QueryRow(stmt).Scan(&url)
+	if err != nil {
+		return "", err
+	}
+	return url, nil
+}
 
 func (m *UrlServiceMock) GetUrl(short_url string) (string, error) {
 	for _, url := range m.DB {
@@ -97,4 +108,22 @@ func (m *UrlServiceMock) DeleteUrl(short_url string) error {
 		}
 	}
 	return fmt.Errorf("Short URL not found")
+}
+
+func (m *UrlServiceMock) GetRandomLeetCode() (string, error) {
+	leetcodeUrls := []string{}
+	for _, url := range m.DB {
+		if url.Leetcode {
+			leetcodeUrls = append(leetcodeUrls, url.Url)
+		}
+	}
+
+	if len(leetcodeUrls) == 0 {
+		return "", fmt.Errorf("LeetCode URL not found")
+	}
+
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	randomIndex := r.Intn(len(leetcodeUrls))
+
+	return leetcodeUrls[randomIndex], nil
 }

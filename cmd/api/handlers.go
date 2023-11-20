@@ -64,3 +64,12 @@ func (app App) GetUrl(c echo.Context) error {
 
 	return echo.ErrNotFound
 }
+
+func (app App) GetRandomLeetCode(c echo.Context) error {
+	url, err := app.UrlModel.GetRandomLeetCode()
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "error getting random leetcode")
+	}
+
+	return c.Redirect(http.StatusMovedPermanently, url)
+}
