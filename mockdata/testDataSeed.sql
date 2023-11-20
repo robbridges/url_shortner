@@ -8,4 +8,4 @@ CREATE TABLE IF NOT EXISTS url (
    UNIQUE (url)
 );
 
-INSERT INTO url (url, short_url, created_at, updated_at) VALUES ('https://www.google.com', 'abcdef', NOW(), NOW());
+INSERT INTO url (url, short_url, created_at, updated_at, leetcode) VALUES ('https://www.google.com', 'abcdef', NOW(), NOW(), false);

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
+	"log"
 	"log/slog"
 )
 
@@ -35,7 +36,7 @@ func main() {
 	app.UrlModel = &models.UrlService{DB: db}
 
 	app.SetupRoutes(e)
-
+	log.Printf("Starting server at port 8080")
 	err = e.Start(":8080")
 	if err != nil {
 		slog.Error("Error starting server")

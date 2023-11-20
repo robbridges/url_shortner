@@ -71,5 +71,5 @@ func (app App) GetRandomLeetCode(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "error getting random leetcode")
 	}
 
-	return c.Redirect(http.StatusMovedPermanently, url)
+	return c.Redirect(http.StatusFound, url)
 }
