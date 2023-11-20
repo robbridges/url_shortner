@@ -68,7 +68,13 @@ func (app App) GetUrl(c echo.Context) error {
 func (app App) GetRandomLeetCode(c echo.Context) error {
 	url, err := app.UrlModel.GetRandomLeetCode()
 	if err != nil {
+		if err.Error() == "LeetCode URL not found" {
+			return c.String(http.StatusNotFound, "No leetcode urls found")
+		}
 		return c.String(http.StatusInternalServerError, "error getting random leetcode")
+	}
+	if url == "" {
+		return echo.ErrNotFound
 	}
 
 	return c.Redirect(http.StatusFound, url)

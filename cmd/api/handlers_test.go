@@ -172,3 +172,123 @@ func TestApp_GetUrl(t *testing.T) {
 		}
 	})
 }
+
+func TestApp_GetRandomLeetCode(t *testing.T) {
+	echo := echo.New()
+
+	t.Run("Happy path", func(t *testing.T) {
+		mockUrlService := &models.UrlServiceMock{
+			DB: []*models.Url{
+				{
+					Url:       "https://example.com",
+					ShortUrl:  "abc123",
+					CreatedAt: time.Now(),
+					UpdatedAt: time.Now(),
+					Leetcode:  true,
+				},
+				{
+					Url:       "https://example.com2",
+					ShortUrl:  "abc123",
+					CreatedAt: time.Now(),
+					UpdatedAt: time.Now(),
+					Leetcode:  true,
+				},
+				{
+					Url:       "https://example.com3",
+					ShortUrl:  "abc123",
+					CreatedAt: time.Now(),
+					UpdatedAt: time.Now(),
+					Leetcode:  true,
+				},
+				{
+					Url:       "https://example.com4",
+					ShortUrl:  "abc123",
+					CreatedAt: time.Now(),
+					UpdatedAt: time.Now(),
+					Leetcode:  true,
+				}, {
+					Url:       "https://example.com5",
+					ShortUrl:  "abc123",
+					CreatedAt: time.Now(),
+					UpdatedAt: time.Now(),
+					Leetcode:  true,
+				}, {
+					Url:       "https://example.com6",
+					ShortUrl:  "abc123",
+					CreatedAt: time.Now(),
+					UpdatedAt: time.Now(),
+					Leetcode:  true,
+				},
+			},
+		}
+
+		app := App{
+			UrlModel: mockUrlService,
+		}
+
+		req := httptest.NewRequest(http.MethodGet, "/leetcode", nil)
+
+		rec := httptest.NewRecorder()
+
+		c := echo.NewContext(req, rec)
+
+		url, err := app.UrlModel.GetRandomLeetCode()
+		if err != nil {
+			t.Errorf("Expected no error, but got %s", err)
+		}
+		assert.NoError(t, app.GetRandomLeetCode(c))
+		assert.Equal(t, http.StatusFound, rec.Code)
+		req2 := httptest.NewRequest(http.MethodGet, "/leetcode", nil)
+
+		rec2 := httptest.NewRecorder()
+
+		c = echo.NewContext(req2, rec2)
+
+		url2, err := app.UrlModel.GetRandomLeetCode()
+		if err != nil {
+			t.Errorf("Expected no error, but got %s", err)
+		}
+		assert.NoError(t, app.GetRandomLeetCode(c))
+		assert.Equal(t, http.StatusFound, rec2.Code)
+
+		req3 := httptest.NewRequest(http.MethodGet, "/leetcode", nil)
+
+		rec3 := httptest.NewRecorder()
+
+		c = echo.NewContext(req3, rec3)
+
+		url3, err := app.UrlModel.GetRandomLeetCode()
+		if err != nil {
+			t.Errorf("Expected no error, but got %s", err)
+		}
+		assert.NoError(t, app.GetRandomLeetCode(c))
+		assert.Equal(t, http.StatusFound, rec2.Code)
+		// we made 3 seperate requests in this test, we did this on the change that the same random url is returned twice, three seems unlikely.
+		assert.NotEqual(t, url, url2, url3)
+	})
+
+	t.Run("Get URL Not Found", func(t *testing.T) {
+		mockUrlService := &models.UrlServiceMock{
+			DB: []*models.Url{
+				{
+					Url:       "https://notleetcode.com",
+					ShortUrl:  "abc123",
+					CreatedAt: time.Now(),
+					UpdatedAt: time.Now(),
+					Leetcode:  false,
+				},
+			},
+		}
+
+		app := App{
+			UrlModel: mockUrlService,
+		}
+		req := httptest.NewRequest(http.MethodGet, "/leetcode", nil)
+		rec := httptest.NewRecorder()
+		c := echo.NewContext(req, rec)
+		assert.NoError(t, app.GetRandomLeetCode(c))
+		assert.Equal(t, http.StatusNotFound, rec.Code)
+		assert.Equal(t, "No leetcode urls found", rec.Body.String())
+	})
+
+}
