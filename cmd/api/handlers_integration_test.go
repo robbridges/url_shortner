@@ -116,3 +116,22 @@ func TestAppIntegration_GetUrl(t *testing.T) {
 		}
 	})
 }
+
+func TestAppIntegration_GetRandomLeetCode(t *testing.T) {
+	cfg := data.DefaultTestPostgresConfig()
+	db, err := data.Open(cfg)
+	if err != nil {
+		t.Error("unable to connect to postgres")
+	}
+	urlService := &models.UrlService{DB: db}
+	app := App{UrlModel: urlService}
+	e := echo.New()
+
+	req := httptest.NewRequest(http.MethodGet, "/leetcode", nil)
+	rec := httptest.NewRecorder()
+
+	c := e.NewContext(req, rec)
+
+	assert.NoError(t, app.GetRandomLeetCode(c))
+	assert.Equal(t, rec.Code, http.StatusFound)
+}
