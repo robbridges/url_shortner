@@ -109,3 +109,27 @@ func TestUrlServiceIntegration_DeleteUrl(t *testing.T) {
 		}
 	})
 }
+
+func TestUrlServiceIntegration_GetRandomLeetCode(t *testing.T) {
+	cfg := data.DefaultTestPostgresConfig()
+	db, err := data.Open(cfg)
+	if err != nil {
+		t.Errorf("Error connecting to Postgress")
+	}
+
+	urlService := UrlService{DB: db}
+	t.Run("Happy Path", func(t *testing.T) {
+		url, err := urlService.GetRandomLeetCode()
+		if err != nil {
+			t.Errorf("Unexpected error")
+		}
+		url2, err := urlService.GetRandomLeetCode()
+		url3, err := urlService.GetRandomLeetCode()
+
+		if url == url2 && url == url3 {
+			t.Errorf("There should have been different urls returned")
+		}
+		t.Log(url, url2, url3)
+	})
+
+}
