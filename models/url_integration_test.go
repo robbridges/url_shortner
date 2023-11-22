@@ -124,8 +124,13 @@ func TestUrlServiceIntegration_GetRandomLeetCode(t *testing.T) {
 			t.Errorf("Unexpected error")
 		}
 		url2, err := urlService.GetRandomLeetCode()
+		if err != nil {
+			t.Errorf("Unexpected error")
+		}
 		url3, err := urlService.GetRandomLeetCode()
-
+		if err != nil {
+			t.Errorf("Unexpected error")
+		}
 		if url == url2 && url == url3 {
 			t.Errorf("There should have been different urls returned")
 		}
